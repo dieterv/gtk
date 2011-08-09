@@ -7,8 +7,9 @@ INTROSPECTION_SCANNER_ARGS = \
 	--warn-all
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
-    --includedir=. \
-    --includedir=../gdk
+	--includedir=. \
+	--includedir=../gdk \
+	--includedir=../gdk/.libs
 
 if USE_QUARTZ
 GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
@@ -1001,36 +1002,39 @@ LDADDS =								\
 
 if HAVE_INTROSPECTION
 introspection_files = \
-    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS)) \
-    $(gtk_base_c_sources) \
-    gtkprintoperation-unix.c \
-    gtktypebuiltins.h \
-    gtktypebuiltins.c
+	$(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS)) \
+	$(gtk_base_c_sources) \
+	gtkprintoperation-unix.c \
+	gtktypebuiltins.h \
+	gtktypebuiltins.c
 
 if USE_X11
 introspection_files += \
-    gtksocket.c \
-    gtkplug.c
+	gtksocket.c \
+	gtkplug.c
 endif
 
-Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
-Gtk_3_0_gir_SCANNERFLAGS = 			\
+Gtk-3.0.gir: libgtk-3.la
+Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
+Gtk_3_0_gir_INCLUDES = Atk-1.0
+Gtk_3_0_gir_LIBS = libgtk-3.la
+Gtk_3_0_gir_CFLAGS = \
+	$(AM_CPPFLAGS) \
+	-UGDK_DISABLE_DEPRECATED \
+	-UGTK_DISABLE_DEPRECATED \
+	-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+Gtk_3_0_gir_FILES = $(introspection_files)
+Gtk_3_0_gir_SCANNERFLAGS = \
 	--add-include-path=$(top_builddir)/gdk	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
-Gtk_3_0_gir_INCLUDES = Atk-1.0
 if USE_X11
-Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
+Gtk_3_0_gir_SCANNERFLAGS += \
+	--add-include-path=$(top_builddir)/gdk/x11
 Gtk_3_0_gir_INCLUDES += xlib-2.0
 endif
 Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
-Gtk_3_0_gir_CFLAGS = \
-		$(AM_CPPFLAGS) \
-		-UGDK_DISABLE_DEPRECATED \
-		-UGTK_DISABLE_DEPRECATED \
-		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_3_0_gir_LIBS = libgtk-3.la
-Gtk_3_0_gir_FILES = $(introspection_files)
-Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
+
+
 INTROSPECTION_GIRS += Gtk-3.0.gir
 
 girdir = $(datadir)/gir-1.0

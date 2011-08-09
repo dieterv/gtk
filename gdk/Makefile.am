@@ -35,6 +35,7 @@ AM_CPPFLAGS = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
+	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)		\
 	-I$(top_builddir)/gdk		\
 	$(GTK_DEBUG_FLAGS)		\
@@ -188,14 +189,14 @@ introspection_files = 		\
         gdkenumtypes.c		\
         gdkenumtypes.h
 
-Gdk-3.0.gir: libgdk-3.la Makefile
-Gdk_3_0_gir_SCANNERFLAGS = 	\
-	--c-include="gdk/gdk.h"
+Gdk-3.0.gir: libgdk-3.la
+Gdk_3_0_gir_PACKAGES = gio-2.0 gdk-pixbuf-2.0 pango cairo
+Gdk_3_0_gir_EXPORT_PACKAGES = gdk-3.0
 Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
 Gdk_3_0_gir_LIBS = libgdk-3.la
+Gdk_3_0_gir_CFLAGS = -I$(top_builddir)/gdk/.libs $(AM_CPPFLAGS)
 Gdk_3_0_gir_FILES = $(introspection_files)
-Gdk_3_0_gir_CFLAGS = $(AM_CPPFLAGS)
-Gdk_3_0_gir_EXPORT_PACKAGES = gdk-3.0
+Gdk_3_0_gir_SCANNERFLAGS = --c-include="gdk/gdk.h"
 INTROSPECTION_GIRS += Gdk-3.0.gir
 
 if USE_X11
