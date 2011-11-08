@@ -491,20 +491,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
       break;
 
     case XP_THEME_ELEMENT_REBAR_CHEVRON:
-      switch (state)
-	{
-	case GTK_STATE_PRELIGHT:
-	  ret = CHEVS_HOT;
-	  break;
-
-	case GTK_STATE_SELECTED:
-	case GTK_STATE_ACTIVE:
-	  ret = CHEVS_PRESSED;
-	  break;
-
-	default:
-	  ret = CHEVS_NORMAL;
-	}
+      ret = CHEVS_NORMAL;
       break;
 
     case XP_THEME_ELEMENT_TOOLBAR_SEPARATOR_H:
