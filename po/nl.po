@@ -1129,7 +1129,7 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Het programma kon keen verbinding maken met de indexer-daemon. Controleer of "
+"Het programma kon geen verbinding maken met de indexer-daemon. Controleer of "
 "dat proces wel loopt."
 
 #: ../gtk/gtkfilechooserdefault.c:8931
